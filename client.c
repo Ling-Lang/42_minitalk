@@ -4,8 +4,6 @@
 #include <signal.h>
 #include <string.h>
 
-#define MAX_STRING_LENGTH 100
-
 void sig_handler(int sig_num) {
     if (sig_num == SIGUSR1) {
         // Do nothing - this bit is a 1
@@ -41,14 +39,14 @@ int main(int argc, char *argv[]) {
             } else {
                 kill(server_pid, SIGUSR2);
             }
-            usleep(1000); // Add a delay of 1 millisecond
+            usleep(50); // adjust this delay as needed
         }
     }
 
     // Signal end of message with 8 SIGUSR2 signals
     for (int i = 0; i < 8; i++) {
         kill(server_pid, SIGUSR2);
-        usleep(1000); // Add a delay of 1 millisecond
+        usleep(50); // adjust this delay as needed
     }
 
     return 0;

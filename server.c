@@ -50,19 +50,18 @@ void sig_handler(int sig_num, siginfo_t *sig_info, void *context) {
     bit_count++;
 
     if (bit_count == 8) {
-        if (current_byte == '\0') {
-            printf("Received string: %s\n", received_string);
-            // printf("Received signal %d\n", sig_num);
-            bit_count = 0;
-            current_byte = 0;
-            memset(received_string, 0, MAX_STRING_LENGTH);
-        } else {
-            strncat(received_string, &current_byte, 1);
-            bit_count = 0;
-            current_byte = 0;
-        }
+        strncat(received_string, &current_byte, 1);
+        bit_count = 0;
+        current_byte = 0;
+    }
+
+    if (received_string[strlen(received_string) - 1] == '\0') {
+        printf("Received string: %s\n", received_string);
+        memset(received_string, 0, MAX_STRING_LENGTH);
     }
 }
+
+
 
 int main() {
     printf("Server PID: %d\n", getpid());

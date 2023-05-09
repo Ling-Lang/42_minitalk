@@ -14,7 +14,7 @@ void sig_handler(int sig_num) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc < 3) {
+    if (argc < 3 || argc > 3) {
         printf("Usage: %s <server_pid> <message>\n", argv[0]);
         exit(1);
     }

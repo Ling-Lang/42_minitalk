@@ -1,8 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
-#include <string.h>
+
+#include "minitalk.h"
 
 void sig_handler(int sig_num) {
     if (sig_num == SIGUSR1) {
@@ -15,7 +12,7 @@ void sig_handler(int sig_num) {
 
 int main(int argc, char *argv[]) {
     if (argc < 3 || argc > 3) {
-        printf("Usage: %s <server_pid> <message>\n", argv[0]);
+        ft_printf("Usage: %s <server_pid> <message>\n", argv[0]);
         exit(1);
     }
 
@@ -23,13 +20,10 @@ int main(int argc, char *argv[]) {
     char *message = argv[2];
     int message_length = strlen(message);
 
-    printf("Sending message '%s' to server with PID %d\n", message, server_pid);
+    ft_printf("Sending message '%s' to server with PID %d\n", message, server_pid);
 
-    struct sigaction sa;
-    memset(&sa, 0, sizeof(sa));
-    sa.sa_handler = sig_handler;
-    sigaction(SIGUSR1, &sa, NULL);
-    sigaction(SIGUSR2, &sa, NULL);
+    signal(SIGUSR1, sig_handler);
+    signal(SIGUSR2, sig_handler);
 
     for (int i = 0; i < message_length; i++) {
         char c = message[i];

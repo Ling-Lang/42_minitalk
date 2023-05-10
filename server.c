@@ -1,11 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jkulka <jkulka@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/09 12:55:39 by jkulka            #+#    #+#             */
+/*   Updated: 2023/05/10 11:00:40 by jkulka           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#define MAX_STRING_LENGTH 1000
 
-void sig_handler(int sig_num, siginfo_t *sig_info, void *context) {
+
+#include "minitalk.h"
+#define BUFFER_SIZE 2048
+
+void sig_handler(int sig_num) {
     static int bit_count = 0;
     static char current_byte = 0;
-    static char received_string[MAX_STRING_LENGTH];
-    static int received_length = 0;
+    static char received_buffer[BUFFER_SIZE + 1]; // +1 for null terminator
+    static int buffer_length = 0;
 
     if (sig_num == SIGUSR1) {
         current_byte |= (1 << bit_count);
@@ -14,32 +28,40 @@ void sig_handler(int sig_num, siginfo_t *sig_info, void *context) {
     bit_count++;
 
     if (bit_count == 8) {
-        strncat(received_string, &current_byte, 1);
-        received_length++;
-        bit_count = 0;
-        current_byte = 0;
-    }
-
-    if (received_length > 0 && received_string[received_length - 1] == '\0') {
-        printf("Received string: %s\n", received_string);
-        memset(received_string, 0, MAX_STRING_LENGTH);
-        received_length = 0;
+        if (current_byte == '\0') {
+            received_buffer[buffer_length] = '\0'; // add null terminator
+            ft_printf("Received message: %s\n", received_buffer);
+            bit_count = 0;
+            current_byte = 0;
+            buffer_length = 0;
+            memset(received_buffer, 0, BUFFER_SIZE + 1); // clear buffer
+        } else if (buffer_length < BUFFER_SIZE) {
+            received_buffer[buffer_length] = current_byte;
+            buffer_length++;
+            bit_count = 0;
+            current_byte = 0;
+        } else {
+            ft_printf("Buffer full - discarding remaining characters\n");
+            bit_count = 0;
+            current_byte = 0;
+            buffer_length = 0;
+            memset(received_buffer, 0, BUFFER_SIZE + 1); // clear buffer
+        }
     }
 }
 
+
 int main() {
-    printf("Server PID: %d\n", getpid());
+    ft_printf("Server PID: %d\n", getpid());
 
     struct sigaction sa;
     memset(&sa, 0, sizeof(sa));
-    sa.sa_sigaction = sig_handler;
-    sa.sa_flags = SA_SIGINFO;
+    sa.sa_handler = sig_handler;
     sigaction(SIGUSR1, &sa, NULL);
     sigaction(SIGUSR2, &sa, NULL);
 
     while (1) {
         pause();
     }
-
     return 0;
 }

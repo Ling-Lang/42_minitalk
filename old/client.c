@@ -33,13 +33,14 @@ int main(int argc, char *argv[]) {
             } else {
                 kill(server_pid, SIGUSR2);
             }
-            usleep(50);
+            usleep(50); // adjust this delay as needed
         }
     }
 
+    // Signal end of message with 8 SIGUSR2 signals
     for (int i = 0; i < 8; i++) {
         kill(server_pid, SIGUSR2);
-        usleep(50);
+        usleep(50); // adjust this delay as needed
     }
 
     return 0;

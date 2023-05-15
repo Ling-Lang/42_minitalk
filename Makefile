@@ -13,10 +13,10 @@ LIB = libft/libft.a
 all: client server lft
 
 client: $(OBJ_CLI) | lft
-	$(CC) $(CFLAGS) $(LIB) -o $@ $(OBJ_CLI)
+	$(CC) $(CFLAGS) -o $@ $(OBJ_CLI) $(LIB)
 
 server: $(OBJ_SRV) | lft
-	$(CC) $(CFLAGS) $(LIB) -o $@ $(OBJ_SRV)
+	$(CC) $(CFLAGS)  -o $@ $(OBJ_SRV) $(LIB)
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c $<

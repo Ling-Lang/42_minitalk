@@ -6,12 +6,12 @@
 /*   By: jkulka <jkulka@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:39:15 by jkulka            #+#    #+#             */
-/*   Updated: 2023/05/17 00:49:20 by jkulka           ###   ########.fr       */
+/*   Updated: 2023/05/17 00:55:17 by jkulka           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-
+// TODO Add a usage message
 static void	action(int sig)
 {
 	if (sig != SIGUSR1)

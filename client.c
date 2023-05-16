@@ -1,46 +1,60 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jkulka <jkulka@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/17 00:39:15 by jkulka            #+#    #+#             */
+/*   Updated: 2023/05/17 00:49:20 by jkulka           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minitalk.h"
 
-void sig_handler(int sig_num) {
-    if (sig_num == SIGUSR1) {
-        // Do nothing - this bit is a 1
-    } else if (sig_num == SIGUSR2) {
-        // Terminate the message loop - this bit is a 0
-        exit(0);
-    }
+static void	action(int sig)
+{
+	if (sig != SIGUSR1)
+	{
+		exit(0);
+	}
 }
 
-int main(int argc, char *argv[]) {
-    if (argc < 3 || argc > 3) {
-        ft_printf("Usage: %s <server_pid> <message>\n", argv[0]);
-        exit(1);
-    }
+static void	mt_kill(int pid, char *str)
+{
+	int		i;
+	char	c;
 
-    int server_pid = atoi(argv[1]);
-    char *message = argv[2];
-    int message_length = strlen(message);
+	while (*str)
+	{
+		i = 8;
+		c = *str++;
+		while (i--)
+		{
+			if (c >> i & 1)
+				kill(pid, SIGUSR2);
+			else
+				kill(pid, SIGUSR1);
+			usleep(12);
+		}
+	}
+	i = 8;
+	while (i--)
+	{
+		kill(pid, SIGUSR1);
+		usleep(12);
+	}
+}
 
-    ft_printf("Sending message '%s' to server with PID %d\n", message, server_pid);
-
-    signal(SIGUSR1, sig_handler);
-    signal(SIGUSR2, sig_handler);
-
-    for (int i = 0; i < message_length; i++) {
-        char c = message[i];
-        for (int j = 0; j < 8; j++) {
-            if (c & (1 << j)) {
-                kill(server_pid, SIGUSR1);
-            } else {
-                kill(server_pid, SIGUSR2);
-            }
-            usleep(50);
-        }
-    }
-
-    for (int i = 0; i < 8; i++) {
-        kill(server_pid, SIGUSR2);
-        usleep(50);
-    }
-
-    return 0;
+int	main(int argc, char **argv)
+{
+	if (argc != 3 || !ft_strlen(argv[2]))
+		return (1);
+	ft_printf("Sent \"%s\" to PID: %d\n", argv[2], ft_atoi(argv[1]));
+	signal(SIGUSR1, action);
+	signal(SIGUSR2, action);
+	mt_kill(ft_atoi(argv[1]), argv[2]);
+	while (1)
+		pause();
+	return (0);
 }

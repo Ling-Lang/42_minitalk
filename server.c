@@ -6,15 +6,13 @@
 /*   By: jkulka <jkulka@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:27:31 by jkulka            #+#    #+#             */
-/*   Updated: 2023/05/17 00:38:52 by jkulka           ###   ########.fr       */
+/*   Updated: 2023/05/17 12:54:28 by jkulka           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-#include <signal.h>
-#include <unistd.h>
 
-static void	action(int sig, siginfo_t *info, void *context)
+static void	sig_handler(int sig, siginfo_t *info, void *context)
 {
 	static int				i;
 	static pid_t			client_pid;
@@ -45,8 +43,8 @@ int	main(void)
 {
 	struct sigaction	s_sigaction;
 
-  ft_printf("Server PID: %d\n", getpid());
-	s_sigaction.sa_sigaction = action;
+	ft_printf(WHT"Server\tPID: "YEL"%d\n", getpid());
+	s_sigaction.sa_sigaction = sig_handler;
 	s_sigaction.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &s_sigaction, 0);
 	sigaction(SIGUSR2, &s_sigaction, 0);

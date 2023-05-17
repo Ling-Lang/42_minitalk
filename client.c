@@ -6,7 +6,7 @@
 /*   By: jkulka <jkulka@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:39:15 by jkulka            #+#    #+#             */
-/*   Updated: 2023/05/17 10:58:30 by jkulka           ###   ########.fr       */
+/*   Updated: 2023/05/17 12:53:26 by jkulka           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	main(int argc, char **argv)
 {
 	if (argc != 3 || !ft_strlen(argv[2]))
 	{
-		ft_printf("Usage: ./client [PID] [message]\n");
+		ft_printf(RED"ERROR\n"WHT"Usage: ./client "YEL"[PID] [message]\n");
 		return (1);
 	}
 	ft_printf("Sent \"%s\" to PID: %d\n", argv[2], ft_atoi(argv[1]));

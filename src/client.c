@@ -6,13 +6,13 @@
 /*   By: jkulka <jkulka@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:39:15 by jkulka            #+#    #+#             */
-/*   Updated: 2023/05/17 20:18:20 by jkulka           ###   ########.fr       */
+/*   Updated: 2023/05/17 21:05:30 by jkulka           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minitalk.h"
 
-static void	action(int sig)
+static void	handle_signal(int sig)
 {
 	if (sig != SIGUSR1)
 	{
@@ -20,7 +20,7 @@ static void	action(int sig)
 	}
 }
 
-static void	ft_kill(int pid, char *str)
+static void	send_string(int pid, char *str)
 {
 	int		i;
 	char	c;
@@ -54,9 +54,9 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	ft_printf("Sent "BLU"\"%s\" " WHT"to PID: "YEL"%d\n", argv[2], ft_atoi(argv[1]));
-	signal(SIGUSR1, action);
-	signal(SIGUSR2, action);
-	ft_kill(ft_atoi(argv[1]), argv[2]);
+	signal(SIGUSR1, handle_signal);
+	signal(SIGUSR2, handle_signal);
+	send_string(ft_atoi(argv[1]), argv[2]);
 	while (1)
 		pause();
 	return (0);

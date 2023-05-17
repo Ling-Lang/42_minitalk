@@ -6,7 +6,7 @@
 /*   By: jkulka <jkulka@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:27:31 by jkulka            #+#    #+#             */
-/*   Updated: 2023/05/17 20:18:25 by jkulka           ###   ########.fr       */
+/*   Updated: 2023/05/17 21:00:43 by jkulka           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	sig_handler(int sig, siginfo_t *info, void *context)
 {
-	static int				i;
+	static int				bit_count;
 	static pid_t			client_pid;
 	static unsigned char	c;
 
@@ -22,9 +22,9 @@ static void	sig_handler(int sig, siginfo_t *info, void *context)
 	if (!client_pid)
 		client_pid = info->si_pid;
 	c |= (sig == SIGUSR2);
-	if (++i == 8)
+	if (++bit_count == 8)
 	{
-		i = 0;
+		bit_count = 0;
 		if (!c)
 		{
 			kill(client_pid, SIGUSR2);

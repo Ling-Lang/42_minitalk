@@ -12,6 +12,7 @@
 
 #include "minitalk.h"
 #include <signal.h>
+#include <unistd.h>
 
 static void	action(int sig, siginfo_t *info, void *context)
 {
@@ -44,9 +45,7 @@ int	main(void)
 {
 	struct sigaction	s_sigaction;
 
-	ft_putstr_fd("Server PID: ", 1);
-	ft_putnbr_fd(getpid(), 1);
-	ft_putchar_fd('\n', 1);
+  ft_printf("Server PID: %d\n", getpid());
 	s_sigaction.sa_sigaction = action;
 	s_sigaction.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &s_sigaction, 0);

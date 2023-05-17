@@ -6,7 +6,7 @@
 /*   By: jkulka <jkulka@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:27:31 by jkulka            #+#    #+#             */
-/*   Updated: 2023/05/17 12:54:28 by jkulka           ###   ########.fr       */
+/*   Updated: 2023/05/17 13:00:31 by jkulka           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	main(void)
 {
 	struct sigaction	s_sigaction;
 
-	ft_printf(WHT"Server\tPID: "YEL"%d\n", getpid());
+	ft_printf(WHT"Server\tPID: "YEL"%d\n"BLU, getpid());
 	s_sigaction.sa_sigaction = sig_handler;
 	s_sigaction.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &s_sigaction, 0);

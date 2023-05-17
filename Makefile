@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 
-SRC_SRV = server.c
-SRC_CLI = client.c
+SRC_SRV = src/server.c
+SRC_CLI = src/client.c
 
 OBJ_SRV = $(SRC_SRV:.c=.o)
 OBJ_CLI = $(SRC_CLI:.c=.o)
@@ -17,9 +17,6 @@ client: $(OBJ_CLI) | lft
 
 server: $(OBJ_SRV) | lft
 	$(CC) $(CFLAGS)  -o $@ $(OBJ_SRV) $(LIB)
-
-%.o : %.c
-	$(CC) $(CFLAGS) -c $<
 
 lft:
 	(cd libft && make all && make clean)
